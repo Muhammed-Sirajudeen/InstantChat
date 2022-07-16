@@ -2,8 +2,14 @@ import './App.css';
 import React, { useState,useEffect } from 'react';
 import image_btn from './send.png';
 import axios from 'axios';
+
+import socketIOClient from "socket.io-client";
+const ENDPOINT = 'http://192.168.138.71:2000';
+
+
 //in the property of content make width responsive
     let chat;
+
     let chatarray=[];
     let url='http://192.168.138.71:5000/';
     
@@ -13,14 +19,19 @@ function App() {
     const [inputvalue,setValue]=useState(" ");
    
     const handleChange=event =>{
+         const socket = socketIOClient(ENDPOINT);
+         socket.emit("message",{"chats":chat});
+         socket.on("message",(data)=>{
+            Addchats([...data.chats]);
+            
+         })
+
         chatarray.push(chat);
-        axios.post(url,{'chat':chat}).then((response)=>{
-            console.log("response is")
-            var data=response.data
-            console.log(data.chats);
-            Addchats([...data.chats])
-        })
+        chat=' ';
+
+        
         setValue("");
+
         
         
         
