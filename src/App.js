@@ -1,10 +1,11 @@
+
 import './App.css';
 import React, { useState,useEffect } from 'react';
 import image_btn from './send.png';
 import axios from 'axios';
 
 import socketIOClient from "socket.io-client";
-const ENDPOINT = 'http://192.168.138.71:2000';
+const ENDPOINT = 'http://[2409:4073:31b:772e:5484:9289:c624:383a]:2000';
 
 
 //in the property of content make width responsive
@@ -12,6 +13,7 @@ const ENDPOINT = 'http://192.168.138.71:2000';
 
     let chatarray=[];
     let url='http://192.168.138.71:5000/';
+    let uniqueNumber;
     
 function App() {
 
@@ -20,7 +22,7 @@ function App() {
    
     const handleChange=event =>{
          const socket = socketIOClient(ENDPOINT);
-         socket.emit("message",{"chats":chat});
+         socket.emit("message",{id:uniqueNumber,"chats":chat});
          socket.on("message",(data)=>{
             Addchats([...data.chats]);
             
@@ -38,6 +40,11 @@ function App() {
         console.log(chatarray);
         
         
+    }
+    const uniqueid=event=>{
+        uniqueNumber=event.target.value;
+        console.log(uniqueNumber)
+
     }
 
 
@@ -65,7 +72,7 @@ function App() {
     <div>
     {chats.map((value)=>{
         return(
-             <p className="body-text">{value}</p>
+             <p className={value.id}>{value.chats}</p>
             )
     })}
    
@@ -87,7 +94,11 @@ function App() {
      
 
     </div>
+    <div className="username-container">
 
+    <input type="text" placeholder="enter name here" className="username"
+        onChange={uniqueid}/>
+        </div>
   
 
 
