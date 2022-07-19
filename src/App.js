@@ -1,32 +1,37 @@
 
 import './App.css';
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect ,useRef} from 'react';
 import image_btn from './send.png';
 import axios from 'axios';
 
 import socketIOClient from "socket.io-client";
-const ENDPOINT = 'http://[2409:4073:31b:772e:5484:9289:c624:383a]:2000';
+const ENDPOINT = 'http://localhost:2000';
 
 
 //in the property of content make width responsive
     let chat;
 
     let chatarray=[];
-    let url='http://192.168.138.71:5000/';
+    let url='http://localhost:2000/';
     let uniqueNumber;
     
 function App() {
 
     const [chats,Addchats]=useState([]);
     const [inputvalue,setValue]=useState(" ");
-   
+    const scrolltoref=useRef();
     const handleChange=event =>{
+
          const socket = socketIOClient(ENDPOINT);
          socket.emit("message",{id:uniqueNumber,"chats":chat});
          socket.on("message",(data)=>{
             Addchats([...data.chats]);
+            scrolltoref.current.scrollIntoView({behavior:"smooth"})
             
+
          })
+         scrolltoref.current.scrollIntoView()
+
 
         chatarray.push(chat);
         chat=' ';
@@ -65,18 +70,20 @@ function App() {
 
     <div className="container">
 
-    <div className="content-container">
+    <div className="content-container" >
     
-    <div  className="content-body">
+    <div  className="content-body" >
 
-    <div>
+    <div className="chat-container" >
     {chats.map((value)=>{
         return(
              <p className={value.id}>{value.chats}</p>
             )
     })}
+    <div ref={scrolltoref}/>
    
     </div>
+
 
 
 

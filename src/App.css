@@ -6,8 +6,12 @@ body{
   color: white;
   font-style: bold;
   font-size: x-large;
-  justify-content: center;
+  justify-content: flex-start;
+  transition-duration: 3s;
 
+}
+.heading:hover{
+  transform: translate(50%);
 }
 
   .container{
@@ -86,6 +90,9 @@ body{
     border-radius: 10px;
 
     
+  }
+  .chat-container{
+    padding-bottom: 30px;
   }
   .send-container{
     display: flex;
